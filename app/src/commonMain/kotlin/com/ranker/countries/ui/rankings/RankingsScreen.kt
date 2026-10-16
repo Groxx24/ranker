@@ -38,6 +38,7 @@ import com.ranker.countries.domain.model.DailyRankings
 import com.ranker.countries.domain.model.Ranking
 import com.ranker.countries.resources.Res
 import com.ranker.countries.resources.app_name
+import com.ranker.countries.resources.empty_rankings
 import com.ranker.countries.resources.header_tagline
 import com.ranker.countries.resources.load_failed
 import com.ranker.countries.resources.loading
@@ -55,7 +56,17 @@ import kotlin.math.floor
 @Composable
 fun RankingsRoute(viewModel: RankingsViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    RankingsScreen(state, onRetry = viewModel::onRetry)
+    Box(Modifier.fillMaxSize()) {
+        RankingsScreen(state, onRetry = viewModel::onRetry)
+        if (viewModel.canPublishSampleStats) {
+            val publish by viewModel.publish.collectAsStateWithLifecycle()
+            PublishSampleStats(
+                state = publish,
+                onPublish = viewModel::onPublishSampleStats,
+                onResultShown = viewModel::onPublishResultShown,
+            )
+        }
+    }
 }
 
 @Composable
@@ -68,6 +79,11 @@ fun RankingsScreen(state: RankingsUiState, onRetry: () -> Unit) {
         }
         RankingsUiState.Failed -> Centered {
             Text(stringResource(Res.string.load_failed), color = MaterialTheme.colorScheme.onBackground)
+            Spacer(Modifier.height(16.dp))
+            Button(onClick = onRetry) { Text(stringResource(Res.string.retry)) }
+        }
+        RankingsUiState.Empty -> Centered {
+            Text(stringResource(Res.string.empty_rankings), color = MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(16.dp))
             Button(onClick = onRetry) { Text(stringResource(Res.string.retry)) }
         }

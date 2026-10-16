@@ -34,6 +34,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics)
+            implementation(libs.firebase.firestore)
+            implementation(libs.kotlinx.coroutines.play.services)
         }
     }
 }
@@ -62,6 +64,11 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
+    }
+
+    buildFeatures {
+        // BuildConfig.DEBUG decides whether the Firestore seeding button is shown.
+        buildConfig = true
     }
 
     compileOptions {
