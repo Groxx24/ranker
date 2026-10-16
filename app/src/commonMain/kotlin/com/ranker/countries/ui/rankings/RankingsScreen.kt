@@ -58,11 +58,13 @@ fun RankingsRoute(viewModel: RankingsViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Box(Modifier.fillMaxSize()) {
         RankingsScreen(state, onRetry = viewModel::onRetry)
-        if (viewModel.canPublishSampleStats) {
+        if (viewModel.canPublishSeedStats) {
             val publish by viewModel.publish.collectAsStateWithLifecycle()
-            PublishSampleStats(
+            PublishSeedStats(
                 state = publish,
-                onPublish = viewModel::onPublishSampleStats,
+                onPublish = viewModel::onPublishSeedStats,
+                onUnlock = viewModel::onUnlock,
+                onUnlockDismissed = viewModel::onUnlockDismissed,
                 onResultShown = viewModel::onPublishResultShown,
             )
         }

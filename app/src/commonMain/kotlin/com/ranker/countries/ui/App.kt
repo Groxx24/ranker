@@ -10,6 +10,6 @@ import com.ranker.countries.ui.theme.RankerTheme
 @Composable
 fun App(container: AppContainer) {
     RankerTheme {
-        RankingsRoute(viewModel { RankingsViewModel(container.getDailyRankings, container.publishSampleStats) })
+        RankingsRoute(viewModel { RankingsViewModel(container.getDailyRankings, container.publishSeedStats) })
     }
 }

@@ -10,6 +10,12 @@
     <string name="debug_publish">Seed Firestore</string>
     <string name="debug_published">Wrote %1$s stats to Firestore</string>
     <string name="debug_publish_failed">Couldn’t write to Firestore. Check the security rules.</string>
+    <string name="debug_unlock_title">Publisher sign-in</string>
+    <string name="debug_unlock_hint">Enter the publisher account’s password to replace the stats in Firestore.</string>
+    <string name="debug_unlock_password">Password</string>
+    <string name="debug_unlock_button">Sign in &amp; publish</string>
+    <string name="debug_unlock_wrong">Wrong password, or no connection</string>
+    <string name="debug_unlock_cancel">Cancel</string>
 
     <string name="insight_lead">%1$s leads by %2$s%</string>
     <string name="insight_ratio">#1 is %1$s× the #10</string>

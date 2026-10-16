@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ranker.countries.domain.model.DailyRankings
 import com.ranker.countries.domain.usecase.GetDailyRankingsUseCase
+import com.ranker.countries.domain.usecase.PublishSeedStatsUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,18 +22,21 @@ sealed interface RankingsUiState {
 /** The debug seeding button's progress, and the outcome to tell about once. */
 sealed interface PublishState {
     data object Idle : PublishState
+    /** Waiting for the publisher's password; [checking] while signing in, [wrong] after a miss. */
+    data class Unlocking(val checking: Boolean = false, val wrong: Boolean = false) : PublishState
     data object Publishing : PublishState
     data class Published(val count: Int) : PublishState
     data object Failed : PublishState
 }
 
 /**
- * Today's rankings, loaded once and again on [onRetry]. With [publishSampleStats] (debug builds),
- * [onPublishSampleStats] seeds the source and loads again from it.
+ * Today's rankings, loaded once and again on [onRetry]. With [publishSeedStats] (debug builds),
+ * [onPublishSeedStats] asks for the publisher's password if needed, seeds the source and loads
+ * again from it.
  */
 class RankingsViewModel(
     private val getDailyRankings: GetDailyRankingsUseCase,
-    private val publishSampleStats: (suspend () -> Int)? = null,
+    private val publishSeedStats: PublishSeedStatsUseCase? = null,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<RankingsUiState>(RankingsUiState.Loading)
@@ -41,7 +45,7 @@ class RankingsViewModel(
     private val _publish = MutableStateFlow<PublishState>(PublishState.Idle)
     val publish: StateFlow<PublishState> = _publish.asStateFlow()
 
-    val canPublishSampleStats: Boolean get() = publishSampleStats != null
+    val canPublishSeedStats: Boolean get() = publishSeedStats != null
 
     init {
         load()
@@ -49,23 +53,47 @@ class RankingsViewModel(
 
     fun onRetry() = load()
 
-    fun onPublishSampleStats() {
-        val publishSampleStats = publishSampleStats ?: return
-        if (_publish.value == PublishState.Publishing) return
+    fun onPublishSeedStats() {
+        val publishSeedStats = publishSeedStats ?: return
+        if (_publish.value != PublishState.Idle) return
+        if (publishSeedStats.isUnlocked) publish(publishSeedStats) else _publish.value = PublishState.Unlocking()
+    }
+
+    fun onUnlock(passphrase: String) {
+        val publishSeedStats = publishSeedStats ?: return
+        val current = _publish.value
+        if (current !is PublishState.Unlocking || current.checking) return
+        _publish.value = PublishState.Unlocking(checking = true)
+        viewModelScope.launch {
+            if (publishSeedStats.unlock(passphrase)) {
+                publish(publishSeedStats)
+            } else {
+                _publish.value = PublishState.Unlocking(wrong = true)
+            }
+        }
+    }
+
+    fun onUnlockDismissed() {
+        val current = _publish.value
+        if (current is PublishState.Unlocking && !current.checking) _publish.value = PublishState.Idle
+    }
+
+    fun onPublishResultShown() {
+        val current = _publish.value
+        if (current is PublishState.Published || current is PublishState.Failed) _publish.value = PublishState.Idle
+    }
+
+    private fun publish(publishSeedStats: PublishSeedStatsUseCase) {
         _publish.value = PublishState.Publishing
         viewModelScope.launch {
             _publish.value = try {
-                PublishState.Published(publishSampleStats()).also { load() }
+                PublishState.Published(publishSeedStats()).also { load() }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
                 PublishState.Failed
             }
         }
-    }
-
-    fun onPublishResultShown() {
-        if (_publish.value != PublishState.Publishing) _publish.value = PublishState.Idle
     }
 
     private fun load() {

@@ -35,6 +35,7 @@ kotlin {
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics)
             implementation(libs.firebase.firestore)
+            implementation(libs.firebase.auth)
             implementation(libs.kotlinx.coroutines.play.services)
         }
     }
@@ -67,7 +68,7 @@ android {
     }
 
     buildFeatures {
-        // BuildConfig.DEBUG decides whether the Firestore seeding button is shown.
+        // BuildConfig.DEBUG decides whether the Firestore seeding button and its lock exist.
         buildConfig = true
     }
 
