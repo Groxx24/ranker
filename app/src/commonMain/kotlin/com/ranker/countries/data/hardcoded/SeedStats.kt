@@ -2,7 +2,6 @@ package com.ranker.countries.data.hardcoded
 
 import com.ranker.countries.data.hardcoded.Countries.afghanistan
 import com.ranker.countries.data.hardcoded.Countries.argentina
-import com.ranker.countries.data.hardcoded.Countries.australia
 import com.ranker.countries.data.hardcoded.Countries.austria
 import com.ranker.countries.data.hardcoded.Countries.bangladesh
 import com.ranker.countries.data.hardcoded.Countries.bhutan
@@ -12,44 +11,32 @@ import com.ranker.countries.data.hardcoded.Countries.chile
 import com.ranker.countries.data.hardcoded.Countries.china
 import com.ranker.countries.data.hardcoded.Countries.colombia
 import com.ranker.countries.data.hardcoded.Countries.costaRica
-import com.ranker.countries.data.hardcoded.Countries.croatia
-import com.ranker.countries.data.hardcoded.Countries.czechia
 import com.ranker.countries.data.hardcoded.Countries.drCongo
-import com.ranker.countries.data.hardcoded.Countries.estonia
 import com.ranker.countries.data.hardcoded.Countries.ethiopia
 import com.ranker.countries.data.hardcoded.Countries.france
 import com.ranker.countries.data.hardcoded.Countries.germany
 import com.ranker.countries.data.hardcoded.Countries.hungary
-import com.ranker.countries.data.hardcoded.Countries.iceland
 import com.ranker.countries.data.hardcoded.Countries.india
 import com.ranker.countries.data.hardcoded.Countries.indonesia
 import com.ranker.countries.data.hardcoded.Countries.iran
-import com.ranker.countries.data.hardcoded.Countries.ireland
 import com.ranker.countries.data.hardcoded.Countries.italy
 import com.ranker.countries.data.hardcoded.Countries.japan
 import com.ranker.countries.data.hardcoded.Countries.kazakhstan
 import com.ranker.countries.data.hardcoded.Countries.kyrgyzstan
-import com.ranker.countries.data.hardcoded.Countries.latvia
 import com.ranker.countries.data.hardcoded.Countries.liberia
-import com.ranker.countries.data.hardcoded.Countries.lithuania
 import com.ranker.countries.data.hardcoded.Countries.malaysia
 import com.ranker.countries.data.hardcoded.Countries.mexico
 import com.ranker.countries.data.hardcoded.Countries.nepal
 import com.ranker.countries.data.hardcoded.Countries.nigeria
-import com.ranker.countries.data.hardcoded.Countries.norway
 import com.ranker.countries.data.hardcoded.Countries.pakistan
 import com.ranker.countries.data.hardcoded.Countries.panama
 import com.ranker.countries.data.hardcoded.Countries.papuaNewGuinea
 import com.ranker.countries.data.hardcoded.Countries.peru
 import com.ranker.countries.data.hardcoded.Countries.philippines
 import com.ranker.countries.data.hardcoded.Countries.poland
-import com.ranker.countries.data.hardcoded.Countries.romania
 import com.ranker.countries.data.hardcoded.Countries.russia
 import com.ranker.countries.data.hardcoded.Countries.sierraLeone
-import com.ranker.countries.data.hardcoded.Countries.southKorea
 import com.ranker.countries.data.hardcoded.Countries.spain
-import com.ranker.countries.data.hardcoded.Countries.sweden
-import com.ranker.countries.data.hardcoded.Countries.switzerland
 import com.ranker.countries.data.hardcoded.Countries.tajikistan
 import com.ranker.countries.data.hardcoded.Countries.tanzania
 import com.ranker.countries.data.hardcoded.Countries.turkey
@@ -61,7 +48,8 @@ import com.ranker.countries.domain.model.CountryValue
 import com.ranker.countries.domain.model.Stat
 
 /**
- * What the debug build's seeding button writes to Firestore, replacing whatever is there. Like
+ * The set the debug build's seeding button writes to Firestore, replacing whatever is there: exactly
+ * five stats, one tab each, in tab order. For a new set, change these and publish again. Like
  * [HardcodedStats], figures are rounded, commonly cited ones, good enough to try the app with, not
  * to quote; values are listed out of order and some stats have more than ten countries.
  */
@@ -141,36 +129,7 @@ internal object SeedStats {
         ),
     )
 
-    val beer = Stat(
-        id = "beer",
-        title = "Beer lovers",
-        emoji = "🍺",
-        unit = "L",
-        decimals = 0,
-        fact = "Czechs have drunk the most beer per person for about 30 years running, far ahead of everyone else.",
-        source = "Beer per person per year · Kirin, approx.",
-        values = listOf(
-            austria at 107.0, czechia at 184.0, romania at 97.0, poland at 99.0, spain at 88.0,
-            germany at 91.0, lithuania at 84.0, croatia at 85.0, latvia at 80.0, ireland at 81.0,
-            estonia at 79.0,
-        ),
-    )
-
-    val lifespan = Stat(
-        id = "lifespan",
-        title = "Long lives",
-        emoji = "🌱",
-        unit = "yrs",
-        decimals = 1,
-        fact = "Japan's Okinawa is one of the world's \"blue zones\", with an unusually large share of people living past 100.",
-        source = "Life expectancy at birth · UN 2023, approx.",
-        values = listOf(
-            southKorea at 84.3, japan at 84.7, australia at 83.9, switzerland at 84.0, italy at 83.7,
-            spain at 83.8, sweden at 83.3, norway at 83.4, iceland at 82.9, france at 83.1, ireland at 82.6,
-        ),
-    )
-
-    val all = listOf(population, peaks, neighbours, heritage, rainfall, beer, lifespan)
+    val all = listOf(population, peaks, neighbours, heritage, rainfall)
 
     private infix fun Country.at(value: Double) = CountryValue(this, value)
 }

@@ -1,9 +1,7 @@
 package com.ranker.countries.data.firestore
 
-import com.ranker.countries.data.dailyRotation
 import com.ranker.countries.data.hardcoded.HardcodedStats
 import com.ranker.countries.data.hardcoded.SeedStats
-import kotlinx.datetime.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -36,10 +34,5 @@ class StatDocumentTest {
         val values = (data["values"] as List<*>).toMutableList()
         values[0] = (values[0] as Map<*, *>) + ("continent" to "ATLANTIS")
         assertEquals(values.size - 1, StatDocument.decode("coffee", data + ("values" to values))!!.values.size)
-    }
-
-    @Test
-    fun anEmptyPoolGivesAnEmptyDay() {
-        assertTrue(dailyRotation(emptyList(), LocalDate(2026, 10, 16)).stats.isEmpty())
     }
 }

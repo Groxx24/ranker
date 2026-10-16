@@ -3,6 +3,7 @@ package com.ranker.countries.domain.usecase
 import com.ranker.countries.domain.model.Stat
 import com.ranker.countries.domain.repository.DebugLock
 import com.ranker.countries.domain.repository.StatPublisher
+import com.ranker.countries.domain.repository.StatRepository.Companion.DAILY_STAT_COUNT
 
 /**
  * Replaces the published stats with [stats], once [lock] is open. The lock is only a convenience in
@@ -13,6 +14,10 @@ class PublishSeedStatsUseCase(
     private val publisher: StatPublisher,
     private val stats: List<Stat>,
 ) {
+    init {
+        require(stats.size == DAILY_STAT_COUNT) { "A published set has $DAILY_STAT_COUNT stats, not ${stats.size}" }
+    }
+
     val isUnlocked: Boolean get() = lock.isOpen
 
     suspend fun unlock(passphrase: String): Boolean = lock.opens(passphrase)

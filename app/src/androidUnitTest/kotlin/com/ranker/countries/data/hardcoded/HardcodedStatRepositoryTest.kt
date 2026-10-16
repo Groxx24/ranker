@@ -6,7 +6,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import kotlinx.datetime.DatePeriod
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -24,11 +23,11 @@ class HardcodedStatRepositoryTest {
     }
 
     @Test
-    fun changesFromOneDayToTheNext() = runTest {
+    fun staysTheSameFromOneDayToTheNext() = runTest {
         val today = repository.statsFor(day).stats.map { it.id }
         val tomorrow = repository.statsFor(day.plus(DatePeriod(days = 1))).stats.map { it.id }
 
-        assertNotEquals(today, tomorrow)
+        assertEquals(today, tomorrow)
     }
 
     @Test
@@ -40,9 +39,9 @@ class HardcodedStatRepositoryTest {
     }
 
     @Test
-    fun seedStatIdsDoNotRepeat() {
+    fun seedStatsAreOneFullSetWithoutRepeats() {
         val ids = SeedStats.all.map { it.id }
+        assertEquals(DAILY_STAT_COUNT, ids.size)
         assertEquals(ids.size, ids.toSet().size)
-        assertTrue(ids.size >= DAILY_STAT_COUNT)
     }
 }

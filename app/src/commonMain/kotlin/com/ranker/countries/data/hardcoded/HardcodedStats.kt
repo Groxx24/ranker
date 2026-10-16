@@ -51,9 +51,9 @@ import com.ranker.countries.domain.model.CountryValue
 import com.ranker.countries.domain.model.Stat
 
 /**
- * The pool the day's stats are picked from. Figures are rounded, commonly cited ones, good enough
- * to try the app with, not to quote. Values are deliberately listed out of order and some stats
- * have more than ten countries: ranking is the domain's job.
+ * Sample stats for [HardcodedStatRepository], which shows the first five. Figures are rounded,
+ * commonly cited ones, good enough to try the app with, not to quote. Values are deliberately
+ * listed out of order and some stats have more than ten countries: ranking is the domain's job.
  */
 internal object HardcodedStats {
 
