@@ -27,6 +27,6 @@ class FirebaseDebugLock(
 
     companion object {
         /** The account made in the Firebase console; its UID is the one `firestore.rules` lets write. */
-        const val PUBLISHER_EMAIL = "pavelparradomarin@gmail.com"
+        const val PUBLISHER_EMAIL = "insomniatft@gmail.com"
     }
 }
