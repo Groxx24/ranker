@@ -27,12 +27,14 @@ class FirestoreStatRepository(
         return dailyRotation(pool, date)
     }
 
-    /** Replaces the whole collection with [stats] in one batch, so readers never see half of it. */
+    /**
+     * Deletes every document in the collection and writes [stats], all in one batch, so readers see
+     * either the old pool or the new one, never an empty or half-written collection.
+     */
     override suspend fun publish(stats: List<Stat>) {
-        val ids = stats.map { it.id }.toSet()
-        val stale = collection.get().await().documents.filterNot { it.id in ids }
+        val existing = collection.get().await().documents
         firestore.batch().apply {
-            stale.forEach { delete(it.reference) }
+            existing.forEach { delete(it.reference) }
             stats.forEachIndexed { order, stat -> set(collection.document(stat.id), StatDocument.encode(stat, order)) }
         }.commit().await()
     }

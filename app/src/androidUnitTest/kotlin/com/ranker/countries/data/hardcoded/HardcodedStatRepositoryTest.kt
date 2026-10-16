@@ -33,9 +33,16 @@ class HardcodedStatRepositoryTest {
 
     @Test
     fun everyStatHasAtLeastTenCountries() {
-        HardcodedStats.all.forEach { stat ->
+        (HardcodedStats.all + SeedStats.all).forEach { stat ->
             assertTrue(stat.id, stat.values.size >= 10)
             assertEquals(stat.id, stat.values.size, stat.values.map { it.country }.toSet().size)
         }
+    }
+
+    @Test
+    fun seedStatIdsDoNotRepeat() {
+        val ids = SeedStats.all.map { it.id }
+        assertEquals(ids.size, ids.toSet().size)
+        assertTrue(ids.size >= DAILY_STAT_COUNT)
     }
 }

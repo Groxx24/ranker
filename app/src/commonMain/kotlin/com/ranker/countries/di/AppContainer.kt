@@ -1,6 +1,6 @@
 package com.ranker.countries.di
 
-import com.ranker.countries.data.hardcoded.HardcodedStats
+import com.ranker.countries.data.hardcoded.SeedStats
 import com.ranker.countries.domain.repository.StatPublisher
 import com.ranker.countries.domain.repository.StatRepository
 import com.ranker.countries.domain.usecase.GetDailyRankingsUseCase
@@ -11,7 +11,7 @@ import kotlin.time.ExperimentalTime
 
 /**
  * Where the app's dependencies are wired, and nowhere else. The platform hands in the data source;
- * a [statPublisher] is only given in debug builds, where it seeds the source with sample stats.
+ * a [statPublisher] is only given in debug builds, where it seeds the source with [SeedStats].
  */
 @OptIn(ExperimentalTime::class)
 class AppContainer(
@@ -24,11 +24,11 @@ class AppContainer(
         today = { Clock.System.todayIn(TimeZone.currentSystemDefault()) },
     )
 
-    /** Writes the hardcoded sample stats to the source and says how many; null outside debug. */
+    /** Replaces what the source holds with [SeedStats] and says how many; null outside debug. */
     val publishSampleStats: (suspend () -> Int)? = statPublisher?.let { publisher ->
         {
-            publisher.publish(HardcodedStats.all)
-            HardcodedStats.all.size
+            publisher.publish(SeedStats.all)
+            SeedStats.all.size
         }
     }
 }
