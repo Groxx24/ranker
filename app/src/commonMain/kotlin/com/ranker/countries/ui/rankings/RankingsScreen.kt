@@ -24,10 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +42,6 @@ import com.ranker.countries.resources.header_tagline
 import com.ranker.countries.resources.load_failed
 import com.ranker.countries.resources.loading
 import com.ranker.countries.resources.retry
-import com.ranker.countries.resources.tap_hint
 import com.ranker.countries.ui.components.AuroraBackground
 import com.ranker.countries.ui.components.RankerMark
 import com.ranker.countries.ui.format.shortDate
@@ -150,7 +146,6 @@ private fun Header(day: DailyRankings) {
 
 @Composable
 private fun RankingPage(ranking: Ranking, accent: Accent, isActive: Boolean) {
-    var selectedRank by rememberSaveable(ranking.stat.id) { mutableStateOf<Int?>(null) }
     Column(
         Modifier
             .fillMaxSize()
@@ -179,22 +174,9 @@ private fun RankingPage(ranking: Ranking, accent: Accent, isActive: Boolean) {
             ranking = ranking,
             accent = accent,
             play = isActive,
-            selectedRank = selectedRank,
-            onSelect = { selectedRank = if (selectedRank == it) null else it },
         )
-        Spacer(Modifier.height(12.dp))
-        Text(
-            stringResource(Res.string.tap_hint),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(Modifier.height(20.dp))
-        InsightPanel(
-            ranking = ranking,
-            selected = ranking.entries.firstOrNull { it.rank == selectedRank },
-            accent = accent,
-        )
+        Spacer(Modifier.height(24.dp))
+        InsightPanel(ranking = ranking, accent = accent)
     }
 }
 

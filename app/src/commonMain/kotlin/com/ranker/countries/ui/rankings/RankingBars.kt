@@ -6,7 +6,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.StartOffset
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
@@ -14,8 +13,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,9 +43,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -69,15 +63,13 @@ private const val STAGGER_MILLIS = 70L
 /**
  * The ten bars of a ranking. Each time [play] turns on they grow in one after the other with a
  * springy overshoot while their numbers count up; when it turns off they slide back out, so a page
- * swiped back to performs again. Tapping a bar selects it and dims the others.
+ * swiped back to performs again.
  */
 @Composable
 fun RankingBars(
     ranking: Ranking,
     accent: Accent,
     play: Boolean,
-    selectedRank: Int?,
-    onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -89,9 +81,6 @@ fun RankingBars(
                 decimals = ranking.stat.decimals,
                 accent = accent,
                 play = play,
-                isSelected = selectedRank == entry.rank,
-                isDimmed = selectedRank != null && selectedRank != entry.rank,
-                onClick = { onSelect(entry.rank) },
             )
         }
     }
@@ -105,9 +94,6 @@ private fun BarRow(
     decimals: Int,
     accent: Accent,
     play: Boolean,
-    isSelected: Boolean,
-    isDimmed: Boolean,
-    onClick: () -> Unit,
 ) {
     val growth = remember { Animatable(0f) }
     LaunchedEffect(play) {
@@ -119,24 +105,14 @@ private fun BarRow(
             growth.animateTo(0f, tween(220, easing = FastOutSlowInEasing))
         }
     }
-    val dim by animateFloatAsState(if (isDimmed) 0.32f else 1f, label = "dim")
-    val haptics = LocalHapticFeedback.current
     val appear = growth.value.coerceIn(0f, 1f)
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .graphicsLayer {
-                alpha = appear * dim
+                alpha = appear
                 translationX = (1f - appear) * 48.dp.toPx()
-            }
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                role = Role.Button,
-            ) {
-                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                onClick()
             }
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -151,7 +127,7 @@ private fun BarRow(
                     text = entry.country.name,
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.SemiBold,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -159,7 +135,7 @@ private fun BarRow(
                 Text(
                     text = formatValue(entry.value * appear, decimals, unit),
                     style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
-                    color = if (isSelected) accent.start else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Spacer(Modifier.height(6.dp))
@@ -167,14 +143,13 @@ private fun BarRow(
                 share = entry.shareOfLeader.toFloat() * growth.value,
                 accent = accent,
                 shimmer = entry.rank == 1,
-                glow = isSelected,
             )
         }
     }
 }
 
 @Composable
-private fun Bar(share: Float, accent: Accent, shimmer: Boolean, glow: Boolean) {
+private fun Bar(share: Float, accent: Accent, shimmer: Boolean) {
     val track = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.07f)
     val sweep = if (shimmer) {
         rememberInfiniteTransition(label = "shimmer").animateFloat(
@@ -190,7 +165,6 @@ private fun Bar(share: Float, accent: Accent, shimmer: Boolean, glow: Boolean) {
     } else {
         null
     }
-    val glowAlpha by animateFloatAsState(if (glow) 0.45f else 0f, label = "glow")
 
     Canvas(Modifier.fillMaxWidth().height(12.dp)) {
         val corner = CornerRadius(size.height / 2)
@@ -200,16 +174,6 @@ private fun Bar(share: Float, accent: Accent, shimmer: Boolean, glow: Boolean) {
         val width = (size.width * share).coerceIn(if (share > 0f) size.height else 0f, size.width)
         if (width <= 0f) return@Canvas
         val fill = Brush.horizontalGradient(listOf(accent.start, accent.end), startX = 0f, endX = width)
-        if (glowAlpha > 0f) {
-            val spread = 4.dp.toPx()
-            drawRoundRect(
-                brush = fill,
-                topLeft = Offset(-spread, -spread),
-                size = Size(width + 2 * spread, size.height + 2 * spread),
-                cornerRadius = CornerRadius(corner.x + spread),
-                alpha = glowAlpha,
-            )
-        }
         drawRoundRect(fill, size = Size(width, size.height), cornerRadius = corner)
         if (sweep != null) {
             val bar = Path().apply { addRoundRect(RoundRect(0f, 0f, width, size.height, corner)) }
