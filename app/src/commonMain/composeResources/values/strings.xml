@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Ranker</string>
+    <string name="header_tagline">Today’s top 10s</string>
+    <string name="loading">Ranking the world…</string>
+    <string name="load_failed">Couldn’t load today’s rankings.</string>
+    <string name="retry">Try again</string>
+    <string name="tap_hint">Tap a bar to compare</string>
+
+    <string name="insight_lead">%1$s leads by %2$s%</string>
+    <string name="insight_ratio">#1 is %1$s× the #10</string>
+    <string name="insight_continent">%1$s of 10 in %2$s</string>
+
+    <string name="selected_rank">#%1$s of 10</string>
+    <string name="selected_leader">Leads #2 by %1$s%</string>
+    <string name="selected_share">%1$s% of the leader</string>
+
+    <string name="continent_africa">Africa</string>
+    <string name="continent_asia">Asia</string>
+    <string name="continent_europe">Europe</string>
+    <string name="continent_north_america">North America</string>
+    <string name="continent_south_america">South America</string>
+    <string name="continent_oceania">Oceania</string>
+</resources>

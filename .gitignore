@@ -1,0 +1,31 @@
+# Gradle and build output
+.gradle/
+.kotlin/
+build/
+/captures
+.externalNativeBuild
+.cxx
+
+# Machine-specific SDK path
+/local.properties
+
+# Android Studio / IntelliJ (regenerated from the Gradle files on sync)
+.idea/
+*.iml
+
+# Xcode per-user state
+xcuserdata/
+*.xcuserstate
+
+# Signing keys and secrets
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+
+# OS and logs
+.DS_Store
+*.log
+
+# Signed bundles Android Studio writes on "Generate Signed App Bundle"
+/app/release/

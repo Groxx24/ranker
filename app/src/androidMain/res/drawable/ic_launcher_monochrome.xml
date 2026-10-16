@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The foreground's shapes in one colour, for themed icons. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M32,34h36a5,5 0,0 1,0 10h-36a5,5 0,0 1,0 -10z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M32,49h24a5,5 0,0 1,0 10h-24a5,5 0,0 1,0 -10z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M32,64h12a5,5 0,0 1,0 10h-12a5,5 0,0 1,0 -10z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M81,33Q81,39 87,39Q81,39 81,45Q81,39 75,39Q81,39 81,33z" />
+</vector>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Three ranked bars, longest on top, and a sparkle after the winner. Same mark as RankerMark. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M32,34h36a5,5 0,0 1,0 10h-36a5,5 0,0 1,0 -10z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="27" android:startY="0" android:endX="73" android:endY="0">
+                <item android:offset="0" android:color="#FFFFC857" />
+                <item android:offset="1" android:color="#FFFF7A45" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M32,49h24a5,5 0,0 1,0 10h-24a5,5 0,0 1,0 -10z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="27" android:startY="0" android:endX="61" android:endY="0">
+                <item android:offset="0" android:color="#FF4BE1FF" />
+                <item android:offset="1" android:color="#FF3D7BFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M32,64h12a5,5 0,0 1,0 10h-12a5,5 0,0 1,0 -10z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="27" android:startY="0" android:endX="49" android:endY="0">
+                <item android:offset="0" android:color="#FFFF8AC4" />
+                <item android:offset="1" android:color="#FFFF3D6E" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:fillColor="#FFFFE08A"
+        android:pathData="M81,33Q81,39 87,39Q81,39 81,45Q81,39 75,39Q81,39 81,33z" />
+</vector>
