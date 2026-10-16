@@ -36,17 +36,17 @@ kotlin {
 }
 
 compose.resources {
-    packageOfResClass = "com.ranker.app.resources"
+    packageOfResClass = "com.ranker.countries.resources"
 }
 
 android {
-    namespace = "com.ranker.app"
+    namespace = "com.ranker.countries"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.ranker.app"
+        applicationId = "com.ranker.countries"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
