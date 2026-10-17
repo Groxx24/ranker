@@ -1,9 +1,9 @@
 package com.ranker.countries.di
 
-import com.ranker.countries.data.hardcoded.SeedStats
 import com.ranker.countries.domain.repository.DebugLock
 import com.ranker.countries.domain.repository.StatPublisher
 import com.ranker.countries.domain.repository.StatRepository
+import com.ranker.countries.domain.repository.StatSource
 import com.ranker.countries.domain.usecase.GetDailyRankingsUseCase
 import com.ranker.countries.domain.usecase.PublishSeedStatsUseCase
 import kotlinx.datetime.TimeZone
@@ -13,7 +13,7 @@ import kotlin.time.ExperimentalTime
 
 /**
  * Where the app's dependencies are wired, and nowhere else. The platform hands in the data source;
- * [debug] is only given in debug builds, where it seeds the source with [SeedStats].
+ * [debug] is only given in debug builds, where it replaces the published stats with new ones.
  */
 @OptIn(ExperimentalTime::class)
 class AppContainer(
@@ -21,8 +21,8 @@ class AppContainer(
     debug: DebugPublishing? = null,
 ) {
 
-    /** What the debug build publishes with, and the lock in front of it. */
-    class DebugPublishing(val publisher: StatPublisher, val lock: DebugLock)
+    /** What the debug build publishes with, where the new stats come from, and the lock in front of it. */
+    class DebugPublishing(val publisher: StatPublisher, val source: StatSource, val lock: DebugLock)
 
     val getDailyRankings = GetDailyRankingsUseCase(
         repository = statRepository,
@@ -31,6 +31,6 @@ class AppContainer(
 
     /** Null outside debug builds. */
     val publishSeedStats: PublishSeedStatsUseCase? = debug?.let {
-        PublishSeedStatsUseCase(lock = it.lock, publisher = it.publisher, stats = SeedStats.all)
+        PublishSeedStatsUseCase(lock = it.lock, publisher = it.publisher, source = it.source)
     }
 }

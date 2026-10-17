@@ -46,7 +46,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 /**
- * Debug builds only: a floating button that replaces the stats in the backend with the seed ones,
+ * Debug builds only: a floating button that replaces the stats in the backend with a new set,
  * asking for the publisher's password first if not signed in yet, and a snackbar that says how it
  * went. Laid over the whole screen so it works on the empty and failed states too.
  */

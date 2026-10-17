@@ -31,7 +31,7 @@ sealed interface PublishState {
 
 /**
  * Today's rankings, loaded once and again on [onRetry]. With [publishSeedStats] (debug builds),
- * [onPublishSeedStats] asks for the publisher's password if needed, seeds the source and loads
+ * [onPublishSeedStats] asks for the publisher's password if needed, publishes a new set and loads
  * again from it.
  */
 class RankingsViewModel(

@@ -7,9 +7,9 @@
     <string name="empty_rankings">No rankings published yet.</string>
 
     <!-- Debug builds only. -->
-    <string name="debug_publish">Seed Firestore</string>
+    <string name="debug_publish">New stats</string>
     <string name="debug_published">Wrote %1$s stats to Firestore</string>
-    <string name="debug_publish_failed">Couldn’t write to Firestore. Check the security rules.</string>
+    <string name="debug_publish_failed">Couldn’t publish new stats. Check the connection and the security rules.</string>
     <string name="debug_unlock_title">Publisher sign-in</string>
     <string name="debug_unlock_hint">Enter the publisher account’s password to replace the stats in Firestore.</string>
     <string name="debug_unlock_password">Password</string>

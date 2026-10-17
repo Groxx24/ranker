@@ -7,6 +7,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.ranker.countries.data.firebase.FirebaseDebugLock
 import com.ranker.countries.data.firestore.FirestoreStatRepository
+import com.ranker.countries.data.worldbank.WorldBankStatSource
 import com.ranker.countries.di.AppContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,11 @@ class RankerApplication : Application() {
         AppContainer(
             statRepository = firestore,
             debug = if (BuildConfig.DEBUG) {
-                AppContainer.DebugPublishing(publisher = firestore, lock = FirebaseDebugLock(Firebase.auth))
+                AppContainer.DebugPublishing(
+                    publisher = firestore,
+                    source = WorldBankStatSource(),
+                    lock = FirebaseDebugLock(Firebase.auth),
+                )
             } else {
                 null
             },

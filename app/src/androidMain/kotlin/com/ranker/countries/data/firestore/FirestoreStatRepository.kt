@@ -27,6 +27,9 @@ class FirestoreStatRepository(
         return DailyStats(date, stats.take(DAILY_STAT_COUNT))
     }
 
+    override suspend fun publishedIds(): Set<String> =
+        collection.get().await().documents.mapTo(mutableSetOf()) { it.id }
+
     /**
      * Deletes every document in the collection and writes [stats], all in one batch, so readers see
      * either the old set or the new one, never an empty or half-written collection.

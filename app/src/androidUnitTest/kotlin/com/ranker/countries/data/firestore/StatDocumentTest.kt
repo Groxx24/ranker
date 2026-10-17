@@ -1,7 +1,6 @@
 package com.ranker.countries.data.firestore
 
 import com.ranker.countries.data.hardcoded.HardcodedStats
-import com.ranker.countries.data.hardcoded.SeedStats
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -11,7 +10,7 @@ class StatDocumentTest {
 
     @Test
     fun everySampleStatSurvivesTheRoundTrip() {
-        (HardcodedStats.all + SeedStats.all).forEachIndexed { order, stat ->
+        HardcodedStats.all.forEachIndexed { order, stat ->
             assertEquals(stat, StatDocument.decode(stat.id, StatDocument.encode(stat, order)))
         }
     }
