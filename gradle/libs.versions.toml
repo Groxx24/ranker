@@ -13,6 +13,7 @@ datetime = "0.7.1"
 googleServices = "4.5.0"
 # BoM 35 is built with Kotlin 2.4 metadata, which Kotlin 2.2 can't read; move up together with Kotlin.
 firebaseBom = "34.19.0"
+playServicesAds = "25.5.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -33,6 +34,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 # Firebase Tasks as suspend calls.
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 
