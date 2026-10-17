@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -54,20 +58,29 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.math.floor
 
 @Composable
-fun RankingsRoute(viewModel: RankingsViewModel) {
+fun RankingsRoute(viewModel: RankingsViewModel, bottomBar: (@Composable () -> Unit)? = null) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    Box(Modifier.fillMaxSize()) {
-        RankingsScreen(state, onRetry = viewModel::onRetry)
-        if (viewModel.canPublishSeedStats) {
-            val publish by viewModel.publish.collectAsStateWithLifecycle()
-            PublishSeedStats(
-                state = publish,
-                onPublish = viewModel::onPublishSeedStats,
-                onUnlock = viewModel::onUnlock,
-                onUnlockDismissed = viewModel::onUnlockDismissed,
-                onResultShown = viewModel::onPublishResultShown,
-            )
+    Column(Modifier.fillMaxSize()) {
+        // The bar pads for the navigation bar, so the screen above it must not pad again.
+        val screenModifier = if (bottomBar != null) {
+            Modifier.consumeWindowInsets(WindowInsets.navigationBars)
+        } else {
+            Modifier
         }
+        Box(Modifier.weight(1f).fillMaxWidth().then(screenModifier)) {
+            RankingsScreen(state, onRetry = viewModel::onRetry)
+            if (viewModel.canPublishSeedStats) {
+                val publish by viewModel.publish.collectAsStateWithLifecycle()
+                PublishSeedStats(
+                    state = publish,
+                    onPublish = viewModel::onPublishSeedStats,
+                    onUnlock = viewModel::onUnlock,
+                    onUnlockDismissed = viewModel::onUnlockDismissed,
+                    onResultShown = viewModel::onPublishResultShown,
+                )
+            }
+        }
+        bottomBar?.invoke()
     }
 }
 
