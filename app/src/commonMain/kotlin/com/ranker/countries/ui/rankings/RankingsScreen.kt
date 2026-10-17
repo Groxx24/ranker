@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ import com.ranker.countries.resources.app_name
 import com.ranker.countries.resources.empty_rankings
 import com.ranker.countries.resources.header_tagline
 import com.ranker.countries.resources.load_failed
+import com.ranker.countries.resources.privacy_options
 import com.ranker.countries.resources.loading
 import com.ranker.countries.resources.retry
 import com.ranker.countries.ui.components.AuroraBackground
@@ -58,7 +60,11 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.math.floor
 
 @Composable
-fun RankingsRoute(viewModel: RankingsViewModel, bottomBar: (@Composable () -> Unit)? = null) {
+fun RankingsRoute(
+    viewModel: RankingsViewModel,
+    bottomBar: (@Composable () -> Unit)? = null,
+    onOpenPrivacyOptions: (() -> Unit)? = null,
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Column(Modifier.fillMaxSize()) {
         // The bar pads for the navigation bar, so the screen above it must not pad again.
@@ -68,7 +74,7 @@ fun RankingsRoute(viewModel: RankingsViewModel, bottomBar: (@Composable () -> Un
             Modifier
         }
         Box(Modifier.weight(1f).fillMaxWidth().then(screenModifier)) {
-            RankingsScreen(state, onRetry = viewModel::onRetry)
+            RankingsScreen(state, onRetry = viewModel::onRetry, onOpenPrivacyOptions = onOpenPrivacyOptions)
             if (viewModel.canPublishSeedStats) {
                 val publish by viewModel.publish.collectAsStateWithLifecycle()
                 PublishSeedStats(
@@ -85,7 +91,7 @@ fun RankingsRoute(viewModel: RankingsViewModel, bottomBar: (@Composable () -> Un
 }
 
 @Composable
-fun RankingsScreen(state: RankingsUiState, onRetry: () -> Unit) {
+fun RankingsScreen(state: RankingsUiState, onRetry: () -> Unit, onOpenPrivacyOptions: (() -> Unit)? = null) {
     when (state) {
         RankingsUiState.Loading -> Centered {
             CircularProgressIndicator()
@@ -102,18 +108,18 @@ fun RankingsScreen(state: RankingsUiState, onRetry: () -> Unit) {
             Spacer(Modifier.height(16.dp))
             Button(onClick = onRetry) { Text(stringResource(Res.string.retry)) }
         }
-        is RankingsUiState.Ready -> RankingsContent(state.day)
+        is RankingsUiState.Ready -> RankingsContent(state.day, onOpenPrivacyOptions)
     }
 }
 
 @Composable
-private fun RankingsContent(day: DailyRankings) {
+private fun RankingsContent(day: DailyRankings, onOpenPrivacyOptions: (() -> Unit)?) {
     val pager = rememberPagerState { day.rankings.size }
     val scope = rememberCoroutineScope()
     Box(Modifier.fillMaxSize()) {
         AuroraBackground(blendedAccent(pager), Modifier.fillMaxSize())
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
-            Header(day)
+            Header(day, onOpenPrivacyOptions)
             Spacer(Modifier.height(16.dp))
             StatTabs(
                 rankings = day.rankings,
@@ -139,7 +145,7 @@ private fun blendedAccent(pager: PagerState): Accent {
 }
 
 @Composable
-private fun Header(day: DailyRankings) {
+private fun Header(day: DailyRankings, onOpenPrivacyOptions: (() -> Unit)?) {
     val accent = accentFor(0)
     Row(
         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp),
@@ -163,16 +169,26 @@ private fun Header(day: DailyRankings) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Text(
-            text = shortDate(day.date),
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.7f))
-                .padding(horizontal = 12.dp, vertical = 6.dp),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
+        if (onOpenPrivacyOptions != null) {
+            HeaderChip(stringResource(Res.string.privacy_options), Modifier.clickable(onClick = onOpenPrivacyOptions))
+            Spacer(Modifier.width(8.dp))
+        }
+        HeaderChip(shortDate(day.date))
     }
+}
+
+@Composable
+private fun HeaderChip(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .clip(CircleShape)
+            .then(modifier)
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.7f))
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurface,
+    )
 }
 
 @Composable

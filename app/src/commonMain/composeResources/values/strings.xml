@@ -7,6 +7,7 @@
     <string name="empty_rankings">No rankings published yet.</string>
 
     <!-- Debug builds only. -->
+    <string name="privacy_options">Privacy</string>
     <string name="debug_publish">New stats</string>
     <string name="debug_published">Wrote %1$s stats to Firestore</string>
     <string name="debug_publish_failed">Couldn’t publish new stats. Check the connection and the security rules.</string>
