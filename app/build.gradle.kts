@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 kotlin {
@@ -36,6 +37,7 @@ kotlin {
             implementation(libs.firebase.analytics)
             implementation(libs.firebase.firestore)
             implementation(libs.firebase.auth)
+            implementation(libs.firebase.crashlytics)
             implementation(libs.kotlinx.coroutines.play.services)
             implementation(libs.play.services.ads)
         }
@@ -62,6 +64,7 @@ android {
 
     buildTypes {
         release {
+            // Crashlytics uploads R8's mapping file with each release build, so stack traces still read.
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))

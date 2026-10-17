@@ -40,12 +40,13 @@
   <li>We don't run our own servers and don't collect personal data ourselves.</li>
   <li>The app shows a banner ad from Google AdMob. In Belgium and the rest of the EEA, Google asks for your consent first, and you can change your choice at any time with the <strong>Privacy</strong> button in the app.</li>
   <li>With your consent, Google Firebase Analytics counts how the app is used, such as how often it is opened and which rankings are viewed, so we can improve it. It never receives your name or email.</li>
+  <li>If the app crashes, Google Firebase Crashlytics sends a crash report so we can fix the bug.</li>
   <li>To show the rankings, the app downloads them from Google Firebase, which sees your IP address like any website does.</li>
   <li>We never sell your data.</li>
 </ul>
 
 <h2>What data is processed, and by whom</h2>
-<p>Four things in the app handle data. Only the first two involve identifiers that can follow your device.</p>
+<p>Five things in the app handle data. Only the first three involve identifiers that can follow your device.</p>
 <div class="table-wrap">
 <table>
   <thead>
@@ -54,6 +55,7 @@
   <tbody>
     <tr><td>Ads and the consent form</td><td>Google Ireland Ltd (AdMob, User Messaging Platform)</td><td>Advertising ID, IP address, device model and OS version, app interactions with ads, your consent choice</td><td>Show the banner ad that pays for the app; with your consent, personalised ads and ad measurement</td></tr>
     <tr><td>Usage statistics</td><td>Google (Firebase Analytics)</td><td>A random app instance ID, app events (first open, sessions, screens viewed, time in the app), device model, OS version, app version, language, and approximate country derived from your IP address</td><td>Understand how the app is used and which rankings people like, to improve it</td></tr>
+    <tr><td>Crash reports</td><td>Google (Firebase Crashlytics)</td><td>Crash stack trace, device model, OS version, app version, a random installation ID, free memory and disk at crash time</td><td>Find and fix crashes</td></tr>
     <tr><td>Daily rankings</td><td>Google (Cloud Firestore)</td><td>IP address and technical request data</td><td>Download the rankings</td></tr>
     <tr><td>Cache on your phone</td><td>Stays on your device</td><td>The rankings last downloaded</td><td>Show the rankings quickly and offline</td></tr>
   </tbody>
@@ -70,6 +72,7 @@
   <li><strong>Personalised ads and ad measurement:</strong> your consent (Art. 6(1)(a) GDPR and the Belgian rules on cookies and device storage). No ad is requested until Google's consent form has been answered.</li>
   <li><strong>Non-personalised ads:</strong> our legitimate interest in funding a free app (Art. 6(1)(f)), within what you allowed in the consent form.</li>
   <li><strong>Usage statistics:</strong> your consent (Art. 6(1)(a) GDPR and the Belgian rules on device storage), given in the same consent form as for ads.</li>
+  <li><strong>Crash reports:</strong> our legitimate interest in keeping the app working (Art. 6(1)(f)). Reports carry no name, email or advertising ID.</li>
   <li><strong>Downloading the rankings:</strong> needed to provide the app you asked for (Art. 6(1)(b)).</li>
 </ul>
 <p>To change or withdraw your consent for ads or usage statistics, tap <strong>Privacy</strong> in the app; the consent form opens again. You can also reset or delete your advertising ID in Android Settings &gt; Privacy &gt; Ads.</p>
@@ -77,6 +80,7 @@
 <h2>How long data is kept, and where</h2>
 <ul>
   <li><strong>Usage statistics</strong> linked to the app instance ID are kept by Firebase Analytics for 2 months, then only totals that can't be traced to a device remain.</li>
+  <li><strong>Crash reports</strong> are kept by Firebase Crashlytics for 90 days, then deleted.</li>
   <li><strong>Ad data</strong> is kept by Google under its own retention rules, described in the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
   <li><strong>Request logs</strong> at Google are kept under its own policies.</li>
   <li><strong>The cache on your phone</strong> is replaced when new rankings are downloaded and deleted when you uninstall the app.</li>

@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.firestore.firestore
 import com.ranker.countries.data.firebase.FirebaseDebugLock
 import com.ranker.countries.data.firestore.FirestoreStatRepository
@@ -32,6 +33,8 @@ class RankerApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Crashes while developing would only bury the real ones.
+        Firebase.crashlytics.isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
         // Off the main thread, as Google recommends: initialization does disk and network work.
         CoroutineScope(Dispatchers.IO).launch { MobileAds.initialize(this@RankerApplication) }
     }
